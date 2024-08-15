@@ -1,0 +1,614 @@
+<html><head><base href="https://img.freepik.com/vecteurs-libre/beaucoup-pommes-rouges-arbre-isole-fond-blanc_1308-56332.jpg%20mettre%20cette,%20image%20pour%20l'arbre%20a%20argent%20sans%20rien%20modifier%20au%20reste">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeu d'Investissement</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  h1, h2 {
+    text-align: center;
+    color: #333;
+  }
+  .menu {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+  .menu-button {
+    padding: 15px 30px;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.1s;
+    margin: 5px;
+  }
+  .menu-button:hover {
+    transform: scale(1.05);
+  }
+  #immobilier { background-color: #4CAF50; color: white; }
+  #crypto { background-color: #2196F3; color: white; }
+  #pret { background-color: #FFC107; color: black; }
+  #boutique { background-color: #FF5722; color: white; }
+  #arbre-argent { background-color: #8BC34A; color: white; }
+  .content {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  #argent-display {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: right;
+    margin-bottom: 10px;
+  }
+  .crypto-item, .booster-item, .property-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+  }
+  .crypto-item button, .booster-item button, .property-item button {
+    padding: 5px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  .tendance-up {
+    color: green;
+  }
+  .tendance-down {
+    color: red;
+  }
+  .pret-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  .pret-form input, .pret-form button {
+    padding: 10px;
+    font-size: 16px;
+  }
+  .pret-details {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+  }
+  .crypto-actions {
+    display: flex;
+    align-items: center;
+  }
+  .crypto-actions input {
+    width: 80px;
+    margin-right: 5px;
+  }
+  .vendre-tout {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  .gain-potentiel {
+    font-style: italic;
+    margin-top: 5px;
+  }
+  .booster-item {
+    background-color: #e0e0e0;
+  }
+  .booster-item button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .booster-item button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  .property-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .property-item h3 {
+    margin-top: 0;
+  }
+  .property-item p {
+    margin: 5px 0;
+  }
+  .property-item button {
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .vacant {
+    color: red;
+    font-weight: bold;
+  }
+  #arbre-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  #arbre {
+    width: 200px;
+    height: 200px;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  #arbre:active {
+    transform: scale(0.95);
+  }
+  #gain-arbre {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  .property-image {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Jeu d'Investissement</h1>
+    <div id="argent-display">Votre argent: <span id="argent">10000.00</span> €</div>
+    <div class="menu">
+      <button id="immobilier" class="menu-button">Marché Immobilier</button>
+      <button id="crypto" class="menu-button">Investissement Crypto</button>
+      <button id="pret" class="menu-button">Prêt Bancaire</button>
+      <button id="boutique" class="menu-button">Boutique</button>
+      <button id="arbre-argent" class="menu-button">Arbre à Argent</button>
+    </div>
+    <div id="content" class="content">
+      <p>Bienvenue dans votre jeu d'investissement ! Choisissez une option du menu pour commencer.</p>
+    </div>
+  </div>
+
+  <script>
+    let argent = 10000; // Montant initial du joueur
+    let proprietes = [];
+    let cryptos = [
+      { nom: 'Bitcoin', prix: 30000, quantite: 0, tendance: 1, prixAchat: 0 },
+      { nom: 'Ethereum', prix: 2000, quantite: 0, tendance: 1, prixAchat: 0 },
+      { nom: 'Dogecoin', prix: 0.1, quantite: 0, tendance: 1, prixAchat: 0 }
+    ];
+    let prets = [];
+    let boosterHausseActif = false;
+    let boosterBaisseActif = false;
+
+    const biensImmobiliers = [
+      { type: 'Maison', nom: 'Villa de luxe', prix: 500000, valeurLocative: 2500, coutRafraichissement: 25000, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6BcBz0zSynmOahQrO5gamF1zktgHbEyZ4hA&s' },
+      { type: 'Maison', nom: 'Maison de ville', prix: 250000, valeurLocative: 1200, coutRafraichissement: 12500, image: 'https://www.maisonsbatifrance.fr/images/maison/10-town-modele-maisons-bati-france.jpg' },
+      { type: 'Maison', nom: 'Pavillon de banlieue', prix: 180000, valeurLocative: 900, coutRafraichissement: 9000, image: 'https://20kl-prod.s3.eu-west-3.amazonaws.com/styles/location_search_result_watermark/s3/import/images/8901/fa-/8901fa01.jpg?itok=57-QYHo6' },
+      { type: 'Appartement', nom: 'Loft en centre-ville', prix: 300000, valeurLocative: 1500, coutRafraichissement: 15000, image: 'https://www.cast-things.com/images/photos/annonces/2015/04/20150404203624-17043_1_3.JPG' },
+      { type: 'Appartement', nom: 'Studio étudiant', prix: 80000, valeurLocative: 450, coutRafraichissement: 4000, image: 'https://cdn.shopify.com/s/files/1/0574/7307/3302/files/comment-amenager-decorer-studio-etudiant_480x480.jpg?v=1659687996' },
+      { type: 'Appartement', nom: 'Duplex moderne', prix: 220000, valeurLocative: 1100, coutRafraichissement: 11000, image: 'https://i.etsystatic.com/46275755/r/il/1f8b26/5461068417/il_fullxfull.5461068417_tvb7.jpg' }
+    ];
+
+    function updateArgent() {
+      document.getElementById('argent').textContent = argent.toFixed(2);
+      sauvegarderJeu();
+    }
+
+    function afficherContent(titre, contenu) {
+      document.getElementById('content').innerHTML = `
+        <h2>${titre}</h2>
+        ${contenu}
+      `;
+      updateArgent();
+    }
+
+    document.getElementById('immobilier').addEventListener('click', () => {
+      afficherContent('Marché Immobilier', `
+        <div id="biens-immobiliers"></div>
+        <div id="proprietes"></div>
+      `);
+      afficherBiensImmobiliers();
+      afficherProprietes();
+    });
+
+    document.getElementById('crypto').addEventListener('click', () => {
+      afficherContent('Investissement Crypto', `
+        <div id="crypto-list"></div>
+        <button class="vendre-tout" onclick="vendreToutCrypto()">Vendre toutes les crypto-monnaies</button>
+      `);
+      afficherCryptos();
+    });
+
+    document.getElementById('pret').addEventListener('click', () => {
+      afficherContent('Prêt Bancaire', `
+        <div class="pret-form">
+          <input type="number" id="montant-pret" placeholder="Montant du prêt" min="1000" step="1000">
+          <input type="number" id="duree-pret" placeholder="Durée (en mois)" min="6" max="360" step="6">
+          <button onclick="demanderPret()">Demander un prêt</button>
+        </div>
+        <div id="prets-actuels"></div>
+      `);
+      afficherPrets();
+    });
+
+    document.getElementById('boutique').addEventListener('click', () => {
+      afficherContent('Boutique', `
+        <div class="booster-item">
+          <div>
+            <h3>Booster de Hausse</h3>
+            <p>Augmente les prix des crypto-monnaies de 10% pendant 1 minute</p>
+          </div>
+          <button onclick="acheterBooster('hausse')" ${boosterHausseActif ? 'disabled' : ''}>
+            Acheter (500 €)
+          </button>
+        </div>
+        <div class="booster-item">
+          <div>
+            <h3>Booster de Baisse</h3>
+            <p>Diminue les prix des crypto-monnaies de 10% pendant 1 minute</p>
+          </div>
+          <button onclick="acheterBooster('baisse')" ${boosterBaisseActif ? 'disabled' : ''}>
+            Acheter (500 €)
+          </button>
+        </div>
+      `);
+    });
+
+    document.getElementById('arbre-argent').addEventListener('click', () => {
+      afficherContent('Arbre à Argent', `
+        <div id="arbre-container">
+          <img id="arbre" src="https://img.freepik.com/vecteurs-libre/beaucoup-pommes-rouges-arbre-isole-fond-blanc_1308-56332.jpg" alt="Arbre à argent" style="width: 200px; height: auto;">
+          <p>Cliquez sur l'arbre pour générer de l'argent !</p>
+          <div id="gain-arbre"></div>
+        </div>
+      `);
+      document.getElementById('arbre').addEventListener('click', cliquerArbre);
+    });
+
+    function cliquerArbre() {
+      const gain = Math.floor(Math.random() * 10) + 1; // Gain aléatoire entre 1 et 10 euros
+      argent += gain;
+      updateArgent();
+      document.getElementById('gain-arbre').textContent = `Vous avez gagné ${gain} € !`;
+    }
+
+    function afficherBiensImmobiliers() {
+      const biensImmobiliersDiv = document.getElementById('biens-immobiliers');
+      biensImmobiliersDiv.innerHTML = '<h3>Biens immobiliers disponibles:</h3>';
+      biensImmobiliers.forEach((bien, index) => {
+        biensImmobiliersDiv.innerHTML += `
+          <div class="property-item">
+            <img src="${bien.image}" alt="${bien.nom}" class="property-image">
+            <h3>${bien.nom}</h3>
+            <p>Type: ${bien.type}</p>
+            <p>Prix: ${bien.prix.toLocaleString()} €</p>
+            <p>Valeur locative mensuelle: ${bien.valeurLocative.toLocaleString()} €</p>
+            <p>Coût de rafraîchissement: ${bien.coutRafraichissement.toLocaleString()} €</p>
+            <button onclick="acheterBienImmobilier(${index})">Acheter</button>
+          </div>
+        `;
+      });
+    }
+
+    function acheterBienImmobilier(index) {
+      const bien = biensImmobiliers[index];
+      if (argent >= bien.prix) {
+        argent -= bien.prix;
+        proprietes.push({ ...bien, loue: true });
+        afficherProprietes();
+        updateArgent();
+        alert(`Félicitations ! Vous avez acheté ${bien.nom} pour ${bien.prix.toLocaleString()} €.`);
+      } else {
+        alert("Vous n'avez pas assez d'argent pour acheter ce bien immobilier.");
+      }
+    }
+
+    function afficherProprietes() {
+      const proprietesDiv = document.getElementById('proprietes');
+      proprietesDiv.innerHTML = '<h3>Vos Propriétés:</h3>';
+      proprietes.forEach((prop, index) => {
+        proprietesDiv.innerHTML += `
+          <div class="property-item">
+            <img src="${prop.image}" alt="${prop.nom}" class="property-image">
+            <h3>${prop.nom}</h3>
+            <p>Type: ${prop.type}</p>
+            <p>Valeur: ${prop.prix.toLocaleString()} €</p>
+            <p>Loyer mensuel: ${prop.valeurLocative.toLocaleString()} €</p>
+            <p>Statut: ${prop.loue ? 'Loué' : '<span class="vacant">Vacant</span>'}</p>
+            ${!prop.loue ? `<button onclick="rafraichirPropriete(${index})">Rafraîchir (${prop.coutRafraichissement.toLocaleString()} €)</button>` : ''}
+          </div>
+        `;
+      });
+    }
+
+    function rafraichirPropriete(index) {
+      const propriete = proprietes[index];
+      if (argent >= propriete.coutRafraichissement) {
+        argent -= propriete.coutRafraichissement;
+        propriete.loue = true;
+        afficherProprietes();
+        updateArgent();
+        alert(`Vous avez rafraîchi ${propriete.nom} pour ${propriete.coutRafraichissement.toLocaleString()} €. Il est maintenant loué.`);
+      } else {
+        alert("Vous n'avez pas assez d'argent pour rafraîchir cette propriété.");
+      }
+    }
+
+    function afficherCryptos() {
+      const cryptoListDiv = document.getElementById('crypto-list');
+      cryptoListDiv.innerHTML = '';
+      cryptos.forEach((crypto, index) => {
+        const tendanceIcon = crypto.tendance > 0 ? '▲' : '▼';
+        const tendanceClass = crypto.tendance > 0 ? 'tendance-up' : 'tendance-down';
+        const prixAchatMoyen = crypto.quantite > 0 ? (crypto.prixAchat / crypto.quantite).toFixed(2) : '0.00';
+        const gainPotentiel = (crypto.prix * crypto.quantite - crypto.prixAchat).toFixed(2);
+        cryptoListDiv.innerHTML += `
+          <div class="crypto-item">
+            <div>
+              <span>${crypto.nom}: ${crypto.prix.toFixed(2)}€ 
+                <span class="${tendanceClass}">${tendanceIcon}</span>
+              </span>
+              <br>
+              <span>Vous possédez: ${crypto.quantite} (Prix d'achat moyen: ${prixAchatMoyen}€)</span>
+              <p class="gain-potentiel">Gain potentiel en cas de vente: ${gainPotentiel}€</p>
+            </div>
+            <div class="crypto-actions">
+              <input type="number" id="quantite-${index}" placeholder="Quantité" min="0" step="0.01">
+              <button onclick="acheterCrypto(${index})">Acheter</button>
+              <button onclick="vendreCrypto(${index})">Vendre</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function acheterCrypto(index) {
+      const crypto = cryptos[index];
+      const quantiteInput = document.getElementById(`quantite-${index}`);
+      const quantite = parseFloat(quantiteInput.value);
+      const coutTotal = crypto.prix * quantite;
+      
+      if (isNaN(quantite) || quantite <= 0) {
+        alert("Veuillez entrer une quantité valide.");
+        return;
+      }
+      
+      if (argent >= coutTotal) {
+        argent -= coutTotal;
+        crypto.quantite += quantite;
+        crypto.prixAchat += coutTotal;
+        updateArgent();
+        afficherCryptos();
+      } else {
+        alert("Vous n'avez pas assez d'argent pour acheter cette quantité de crypto-monnaie.");
+      }
+    }
+
+    function vendreCrypto(index) {
+      const crypto = cryptos[index];
+      const quantiteInput = document.getElementById(`quantite-${index}`);
+      const quantite = parseFloat(quantiteInput.value);
+      
+      if (isNaN(quantite) || quantite <= 0) {
+        alert("Veuillez entrer une quantité valide.");
+        return;
+      }
+      
+      if (crypto.quantite >= quantite) {
+        const gainVente = crypto.prix * quantite;
+        argent += gainVente;
+        crypto.quantite -= quantite;
+        if (crypto.quantite === 0) {
+          crypto.prixAchat = 0;
+        } else {
+          crypto.prixAchat = (crypto.prixAchat / (crypto.quantite + quantite)) * crypto.quantite;
+        }
+        updateArgent();
+        afficherCryptos();
+      } else {
+        alert("Vous n'avez pas assez de cette crypto-monnaie à vendre.");
+      }
+    }
+
+    function vendreToutCrypto() {
+      let gainTotal = 0;
+      cryptos.forEach(crypto => {
+        const gainVente = crypto.prix * crypto.quantite;
+        gainTotal += gainVente;
+        crypto.quantite = 0;
+        crypto.prixAchat = 0;
+      });
+      argent += gainTotal;
+      updateArgent();
+      afficherCryptos();
+      alert(`Vous avez vendu toutes vos crypto-monnaies pour un gain total de ${gainTotal.toFixed(2)}€.`);
+    }
+
+    function demanderPret() {
+      const montant = parseFloat(document.getElementById('montant-pret').value);
+      const duree = parseInt(document.getElementById('duree-pret').value);
+      
+      if (isNaN(montant) || isNaN(duree) || montant <= 0 || duree <= 0) {
+        alert("Veuillez entrer des valeurs valides pour le montant et la durée du prêt.");
+        return;
+      }
+
+      const tauxInteret = 0.05; // 5% d'intérêt annuel
+      const tauxMensuel = tauxInteret / 12;
+      const mensualite = (montant * tauxMensuel * Math.pow(1 + tauxMensuel, duree)) / (Math.pow(1 + tauxMensuel, duree) - 1);
+
+      const nouveauPret = {
+        montant: montant,
+        duree: duree,
+        tauxInteret: tauxInteret,
+        mensualite: mensualite,
+        restant: montant
+      };
+
+      prets.push(nouveauPret);
+      argent += montant;
+
+      afficherPrets();
+      updateArgent();
+    }
+
+    function afficherPrets() {
+      const pretsActuelsDiv = document.getElementById('prets-actuels');
+      pretsActuelsDiv.innerHTML = '<h3>Vos Prêts en cours:</h3>';
+      prets.forEach((pret, index) => {
+        pretsActuelsDiv.innerHTML += `
+          <div class="pret-details">
+            <p>Prêt ${index + 1}:</p>
+            <p>Montant initial: ${pret.montant.toFixed(2)}€</p>
+            <p>Durée: ${pret.duree} mois</p>
+            <p>Taux d'intérêt: ${(pret.tauxInteret * 100).toFixed(2)}%</p>
+            <p>Mensualité: ${pret.mensualite.toFixed(2)}€</p>
+            <p>Montant restant à rembourser: ${pret.restant.toFixed(2)}€</p>
+          </div>
+        `;
+      });
+    }
+
+    function acheterBooster(type) {
+      if (argent >= 500) {
+        argent -= 500;
+        updateArgent();
+        
+        if (type === 'hausse') {
+          boosterHausseActif = true;
+          setTimeout(() => {
+            boosterHausseActif = false;
+            alert("Le booster de hausse est terminé.");
+          }, 60000);
+          alert("Booster de hausse activé pour 1 minute !");
+        } else if (type === 'baisse') {
+          boosterBaisseActif = true;
+          setTimeout(() => {
+            boosterBaisseActif = false;
+            alert("Le booster de baisse est terminé.");
+          }, 60000);
+          alert("Booster de baisse activé pour 1 minute !");
+        }
+        
+        document.getElementById('boutique').click();
+      } else {
+        alert("Vous n'avez pas assez d'argent pour acheter ce booster.");
+      }
+    }
+
+    function sauvegarderJeu() {
+      const sauvegarde = {
+        argent: argent,
+        proprietes: proprietes,
+        cryptos: cryptos,
+        prets: prets,
+        boosterHausseActif: boosterHausseActif,
+        boosterBaisseActif: boosterBaisseActif
+      };
+      localStorage.setItem('sauvegardeJeu', JSON.stringify(sauvegarde));
+    }
+
+    function restaurerJeu() {
+      const sauvegarde = JSON.parse(localStorage.getItem('sauvegardeJeu'));
+      if (sauvegarde) {
+        argent = sauvegarde.argent;
+        proprietes = sauvegarde.proprietes;
+        cryptos = sauvegarde.cryptos;
+        prets = sauvegarde.prets;
+        boosterHausseActif = sauvegarde.boosterHausseActif;
+        boosterBaisseActif = sauvegarde.boosterBaisseActif;
+      }
+      updateArgent();
+      afficherProprietes();
+      afficherCryptos();
+      afficherPrets();
+    }
+
+    setInterval(() => {
+      // Mise à jour des loyers et gestion des locataires
+      proprietes.forEach(prop => {
+        if (prop.loue) {
+          argent += prop.valeurLocative;
+          // 5% de chance qu'un locataire parte chaque mois
+          if (Math.random() < 0.05) {
+            prop.loue = false;
+            alert(`Le locataire de ${prop.nom} est parti. Vous devez rafraîchir la propriété pour la relouer.`);
+          }
+        }
+      });
+
+      // Mise à jour des prix des cryptos
+      cryptos.forEach(crypto => {
+        let variation = (Math.random() - 0.5) * 0.1; // -5% à +5%
+        
+        if (boosterHausseActif) {
+          variation = Math.abs(variation) + 0.05; // Augmentation de 5% à 15%
+        } else if (boosterBaisseActif) {
+          variation = -Math.abs(variation) - 0.05; // Diminution de 5% à 15%
+        }
+        
+        crypto.prix *= (1 + variation);
+        crypto.tendance = variation > 0 ? 1 : -1;
+      });
+
+      // Remboursement des prêts
+      prets.forEach(pret => {
+        if (pret.restant > 0) {
+          const remboursement = Math.min(pret.mensualite, pret.restant);
+          if (argent >= remboursement) {
+            argent -= remboursement;
+            pret.restant -= remboursement;
+          } else {
+            alert("Vous n'avez pas assez d'argent pour rembourser votre prêt ce mois-ci !");
+          }
+        }
+      });
+
+      // Supprimer les prêts entièrement remboursés
+      prets = prets.filter(pret => pret.restant > 0);
+
+      updateArgent();
+      if (document.getElementById('crypto-list')) {
+        afficherCryptos();
+      }
+      if (document.getElementById('prets-actuels')) {
+        afficherPrets();
+      }
+      if (document.getElementById('proprietes')) {
+        afficherProprietes();
+      }
+    }, 10000); // Mise à jour toutes les 10 secondes
+
+    // Initial update and game restoration
+    window.onload = () => {
+      restaurerJeu();
+      updateArgent();
+    };
+  </script>
+</body>
+</html>
